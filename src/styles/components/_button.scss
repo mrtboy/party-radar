@@ -1,0 +1,24 @@
+.button {
+  background: $red;
+  padding: $s-size $l-size;
+  color: #fff;
+  border: 0;
+}
+
+.button:hover {
+  color: rgb(223, 210, 210);
+}
+
+.button-add {
+  text-decoration: none;
+  background: $blue;
+  padding: $s-size $l-size;
+  color: #fff;
+  line-height: 1;
+  display: inline-block;
+  border: 0;
+}
+
+.button--link {
+  background: none;
+}

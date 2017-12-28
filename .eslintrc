@@ -1,0 +1,19 @@
+{
+  "parserOptions": {
+      "parser": "babel-eslint",
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+          "jsx": true,
+          "react": 16
+      }
+  },
+  "rules": {
+      "semi": 2,
+      "strict": 0
+  },
+  "plugins": [
+    "class-property"
+    ]
+
+}
