@@ -1,3 +1,1 @@
-# Git Commands
-
-Expensify App
+# Party Radar
