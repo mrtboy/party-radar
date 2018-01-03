@@ -32,6 +32,9 @@ class Map extends React.Component {
     this.props.initMap(this.map);   
   }
  
+  componentWillUnmount() {
+    window.google = {}
+  }
   getCurrenctLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
