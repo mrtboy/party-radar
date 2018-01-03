@@ -15,18 +15,18 @@ class EventForm extends React.Component {
 
     this.state = {
       title: props.event ? props.event.title : '',
-      startDate: props.event ? props.event.startDate : moment(),
-      endDate: props.event ? props.event.endDate : moment(),
-      startTime: moment(),
-      endTime: moment(),
+      startDate: props.event ? moment(props.event.startDate) : moment(),
+      endDate: props.event ? moment(props.event.endDate) : moment(),
+      startTime: props.event ? props.event.startTime : moment(),
+      endTime: props.event ? props.event.endTime : moment(),
       createdAt: props.event ? props.event.createdAt : now,
       type: props.event ? props.event.type : '',
       description: props.event ? props.event.description : '',
       themeClothes: props.event ? props.event.themeClothes : '',
-      place_Id: props.event ? props.event.place_Id : '',
+      place_id: props.event ? props.event.place_id : '',
       address: props.event ? props.event.address : '',
       locationName: props.event ? props.event.locationName : '',
-      geolocataion: props.event ? props.event.geolocataion : {},
+      geolocation: props.event ? props.event.geolocation : {},
       calenderfocused: false
     };
   }
@@ -34,19 +34,20 @@ class EventForm extends React.Component {
 
   componentDidUpdate() {
     let map = this.props.map.map;
-  
-    var infowindowContent = document.getElementById('infowindow-content');
-    var input = document.getElementById('pac-input');
+    let autocomplete = {};
 
-    var autocomplete = new google.maps.places.Autocomplete(input);
+    let infowindowContent = document.getElementById('infowindow-content');
+    let input = document.getElementById('pac-input');
+
+    autocomplete = new google.maps.places.Autocomplete(input);
     autocomplete.bindTo('bounds', map);
 
     // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-    var infowindow = new google.maps.InfoWindow();
+    let infowindow = new google.maps.InfoWindow();
 
     infowindow.setContent(infowindowContent);
-    var marker = new google.maps.Marker({
+    let marker = new google.maps.Marker({
       map: map
     });
     marker.addListener('click', function () {
@@ -59,7 +60,7 @@ class EventForm extends React.Component {
       if (!place.geometry) {
         return;
       }
-
+ 
       if (place.geometry.viewport) {
         map.fitBounds(place.geometry.viewport);
       } else {
@@ -78,7 +79,7 @@ class EventForm extends React.Component {
           locationName: place.name,
           place_id: place.place_id,
           address: place.formatted_address,
-          geolocataion: {
+          geolocation: {
             lat: place.geometry.location.lat(),
             lng: place.geometry.location.lng()
           }
@@ -86,6 +87,10 @@ class EventForm extends React.Component {
       });
     }.bind(this));
 
+  }
+
+  componentDidCatch(){
+    window.google = {}
   }
 
 
@@ -134,8 +139,6 @@ class EventForm extends React.Component {
     this.setState(() => ({ country }));
   };
 
-  //#endregion
-
   onDatesChange = ({ startDate, endDate }) => {
     this.setState(() => ({
       startDate,
@@ -150,12 +153,12 @@ class EventForm extends React.Component {
     const address = e.target.value;
     this.setState(() => ({ address }));
   }
-
+ //#endregion
 
   onSubmit = (e) => {
     e.preventDefault();
 
-    if (!this.state.title || this.state.startAt || this.endAt) {
+    if (!this.state.title) {
       this.setState(() => ({
         error: 'Please provide Title of party and start and end date.'
       }))
@@ -163,16 +166,18 @@ class EventForm extends React.Component {
       this.setState(() => ({ error: '' }))
       this.props.onSubmit({
         title: this.state.title,
-        startDate: this.state.startDate,
-        endDate: this.state.endDate,
+        startDate: this.state.startDate.valueOf(),
+        endDate: this.state.endDate.valueOf(),
+        startTime: this.state.startTime.valueOf(),
+        endTime: this.state.endTime.valueOf(),
         createdAt: this.state.createdAt.valueOf(),
         type: this.state.type,
         description: this.state.description,
         themeClothes: this.state.themeClothes,
-        place_Id: this.state.place_Id,
+        place_id: this.state.place_id,
         address: this.state.address,
         locationName: this.state.locationName,
-        geolocataion: this.state.geolocataion
+        geolocation: this.state.geolocation
       })
     }
   }
@@ -199,7 +204,13 @@ class EventForm extends React.Component {
           <textarea type="text" className="text-area" placeholder="Description" onChange={this.onDescriptionChange} value={this.state.description} />
           <input type="text" className="text-input" placeholder="Theme Clothes" onChange={this.onThemeChange} value={this.state.themeClothes} />
           <input type="text" className="text-input" placeholder="Location Name" value={this.state.locationName} disabled />
-          <input type="text" className="text-input" placeholder="Address" onChange={this.onAddressChange} value={this.state.address} id="pac-input" value={this.state.address} />
+          <input type="text"
+            className="text-input"
+            placeholder="Address"
+            onChange={this.onAddressChange}
+            value={this.state.address}
+            id="pac-input"
+            value={this.state.address} />
 
           <div>
             <div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import EventForm from './EventForm';
-import {addEvent} from '../actions/events';
+import {addEventTodb} from '../actions/events';
 
 export class AddEventPage extends React.Component {
   onSubmit = (event) => {
@@ -19,7 +19,7 @@ export class AddEventPage extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  addEvent: (event) => dispatch(addEvent(event))
+  addEvent: (event) => dispatch(addEventTodb(event))
 });
 
 export default connect(undefined, mapDispatchToProps)(AddEventPage);

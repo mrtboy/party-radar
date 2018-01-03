@@ -1,33 +1,37 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import EventForm from './EventForm';
-import { editEvent, removeEvent } from '../actions/events';
+import { editEventFromdb, removeEventFromdb } from '../actions/events';
 
 
-const EditEventPage = (props) => {
-  return (
-  <div className="content-container">
-    <h1>Edit Event</h1>
-    <EventForm 
-      event={props.event}
-      onSubmit={(event) => {
-        props.dispatch(editEvent(props.event.id, event));
-        props.history.push('/');
-      }}
-    />
-    <button
-      className="button"
-      onClick={()=>{
-        props.dispatch(removeEvent({id: props.event.id }));
-        props.history.push('/');
-      }}
-    >
-      Remove
-    </button>
-  </div>
-  );
+export class EditEventPage extends React.Component {
+  onSubmit = (event) => {
+    this.props.editEventFromdb(this.props.event.id, event);
+    this.props.history.push('/');
+  };
+  onRemove = () => {
+    this.props.removeEventFromdb({ id: this.props.event.id });
+    this.props.history.push('/');
+  };
+  render() {
+    return (
+      <div>
+        <div className="page-header">
+          <div className="content-container">
+            <h1 className="page-header__title">Edit Event</h1>
+          </div>
+        </div>
+        <div className="content-container">
+          <EventForm
+            event={this.props.event}
+            onSubmit={this.onSubmit}
+          />
+          <button className="button button--secondary" onClick={this.onRemove}>Remove Event</button>
+        </div>
+      </div>
+    );
+  }
 };
-
 
 const mapStateToProps = ( state, props ) => {
   return {
@@ -35,4 +39,10 @@ const mapStateToProps = ( state, props ) => {
   };
 };
 
-export default connect(mapStateToProps)(EditEventPage);
+
+const mapDispatchToProps = (dispatch, props) => ({
+  editEventFromdb: (id, event) => dispatch(editEventFromdb(id, event)),
+  removeEventFromdb: (data) => dispatch(removeEventFromdb(data))
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(EditEventPage);

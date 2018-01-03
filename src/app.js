@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 import AppRouter, { history } from './routers/AppRouter';
+import  { setEventsTodb } from './actions/events';
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';
 import 'react-dates/lib/css/_datepicker.css';
@@ -32,10 +33,12 @@ ReactDOM.render(<LoadingPage />, document.getElementById('app'));
 firebase.auth().onAuthStateChanged((user) => {
   if(user) {
     store.dispatch(login(user.uid));
-    renderApp();
+    store.dispatch(setEventsTodb()).then(()=>{
+      renderApp();
       if( history.location.pathname==='/') {
         history.push('/dashboard');
       };
+    });
   } else {
     store.dispatch(logout());
     renderApp();

@@ -52,11 +52,6 @@ class SearchPage extends React.Component {
     }
   }
 
-  panToArcDeTriomphe() {
-    this.props.map.map.setCenter({ lat: 48.873947, lng: 2.295038 });
-    this.setState(() => ({ lat: 48.873947, lng: 2.295038 }));
-    this.createMarker({ lat: 48.873947, lng: 2.295038 });
-  }
 
   onSearchChange(e) {
     const search = e.target.value;
@@ -64,36 +59,24 @@ class SearchPage extends React.Component {
   }
 
   onSubmit = (e) => {
+    let map = this.props.map.map
     e.preventDefault();
-    var outerCoords = [
-      { lat: -32.364, lng: 153.207 }, // north west
-      { lat: -35.364, lng: 153.207 }, // south west
-      { lat: -35.364, lng: 158.207 }, // south east
-      { lat: -32.364, lng: 158.207 }  // north east
-    ];
 
-    // Define the LatLng coordinates for an inner path.
-    var innerCoords1 = [
-      { lat: -33.364, lng: 154.207 },
-      { lat: -34.364, lng: 154.207 },
-      { lat: -34.364, lng: 155.207 },
-      { lat: -33.364, lng: 155.207 }
-    ];
+    var script = document.createElement('script');
+    script.src = "./data.json"
+    document.getElementsByTagName('head')[0].appendChild(script);
 
-    // Define the LatLng coordinates for another inner path.
-    var innerCoords2 = [
-      { lat: -33.364, lng: 156.207 },
-      { lat: -34.364, lng: 156.207 },
-      { lat: -34.364, lng: 157.207 },
-      { lat: -33.364, lng: 157.207 }
-    ];
-
-    this.map.data.add({
-      geometry: new google.maps.Data.Polygon([outerCoords,
-        innerCoords1,
-        innerCoords2])
-    })
-
+    window.eqfeed_callback = function(results) {
+      console.log(results);
+      for (var i = 0; i < results.features.length; i++) {
+        var coords = results.features[i].geometry.coordinates;
+        var latLng = new google.maps.LatLng(coords[1],coords[0]);
+        var marker = new google.maps.Marker({
+          position: latLng,
+          map: map
+        });
+      }
+    }
   };
 
   render() {
@@ -106,7 +89,7 @@ class SearchPage extends React.Component {
             value={this.state.search}
             placeholder="Search Event"
             onChange={this.onSearchChange} />
-          <button>Search</button>
+          <button onClick={this.onSrachClickHangle}>Search</button>
         </form>
         <button onClick={this.getMyLocation}>My Location</button>
         
