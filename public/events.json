@@ -1,0 +1,19 @@
+{
+  "type": "public",
+  "properties" :{
+    "events": {
+      "title": "party",
+      "address": "Kiel"
+    }
+  },
+  "geometry": {
+    "type": "Point",
+    "coordicates": [
+      178.4611,
+      -24.822,
+      576.63
+    ]
+  },
+  "id": "1"
+ 
+}

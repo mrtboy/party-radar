@@ -1,31 +1,34 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should render Header correctly 1`] = `
-<header
-  className="header"
->
-  <div
-    className="content-container"
+<div>
+  <header
+    className="header"
   >
     <div
-      className="header__content"
+      className="content-container"
     >
-      <Link
-        className="header__title"
-        replace={false}
-        to="/dashboard"
+      <div
+        className="header__content"
       >
-        <h1>
-          Party Radar
-        </h1>
-      </Link>
-      <button
-        className="button button--link"
-        onClick={[Function]}
-      >
-        Logout
-      </button>
+        <Link
+          className="header__title"
+          replace={false}
+          to="/dashboard"
+        >
+          <h1>
+            Party Radar
+          </h1>
+        </Link>
+        <button
+          className="button button--link"
+          onClick={[Function]}
+        >
+          Logout
+        </button>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
+  <MenuBar />
+</div>
 `;

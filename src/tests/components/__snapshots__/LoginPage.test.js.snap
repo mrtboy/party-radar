@@ -13,7 +13,7 @@ exports[`should render Login Page 1`] = `
       Party Radat
     </h1>
     <p>
-      Tag Line for app
+      Check live party around yourself!
     </p>
     <button
       className="button"
