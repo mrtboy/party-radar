@@ -22,11 +22,12 @@ export class EditEventPage extends React.Component {
           </div>
         </div>
         <div className="content-container">
+        
           <EventForm
             event={this.props.event}
             onSubmit={this.onSubmit}
           />
-          <button className="button button--secondary" onClick={this.onRemove}>Remove Event</button>
+          <button className="button button--delete" onClick={this.onRemove}>Remove Event</button>
         </div>
       </div>
     );

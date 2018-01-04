@@ -4,14 +4,23 @@ import EventListItem from './EventListItem';
 
 export const EventList = (props) => (
   <div className="content-container">
+    <div className="list-header">
+      <h3>Title</h3>
+      <h3>Place</h3>
+    </div>
+    <div  className="list-body">
+
     {props.events.length === 0 ? (
+      <div className="list-item list-item--message">
       <p>No Event</p>
+      </div>
     ): (
       props.events.map((event) =>
         <EventListItem key={event.id} {...event} />
       
       ))
     }
+    </div>
   </div>
 );
 

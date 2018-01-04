@@ -3,7 +3,6 @@ import SearchPage from './SearchPage';
 
 const DashboardPage = () => (
   <div>
-   Dashboard Page
   <SearchPage />
   </div>
 );
