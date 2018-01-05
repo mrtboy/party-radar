@@ -27,7 +27,7 @@ class EventForm extends React.Component {
       address: props.event ? props.event.address : '',
       locationName: props.event ? props.event.locationName : '',
       geolocation: props.event ? props.event.geolocation : {},
-      calenderfocused: false
+      calendarFocused: null
     };
   }
 
@@ -145,6 +145,7 @@ class EventForm extends React.Component {
       endDate
     }))
   };
+  
   onFocusChange = (calendarFocused) => {
     this.setState(() => ({ calendarFocused }));
   }
@@ -184,7 +185,6 @@ class EventForm extends React.Component {
 
 
   render() {
-
     return (
       <div className="content-container">
         <form onSubmit={this.onSubmit} className="form">
@@ -221,7 +221,7 @@ class EventForm extends React.Component {
             </button>
           </div>
         </form>
-        <Map />
+        <Map event={this.props.event}/>
       </div>
     );
   }

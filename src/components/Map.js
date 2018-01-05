@@ -3,13 +3,16 @@ import { connect } from 'react-redux';
 import { initMap } from '../actions/map';
 
 class Map extends React.Component {
+  constructor(props) {
+    super(props);
 
-  state = {
-    map: {},
-    lat: 48.858608,
-    lng: 2.294471,
-  };
+    this.state = {
+      map: {},
+      lat: props.event ? props.event.geolocation.lat : 48.858608,
+      lng: props.event ? props.event.geolocation.lng : 2.294471,
+    };
 
+  }
 
   componentDidMount() {
     let self = this;
@@ -17,23 +20,47 @@ class Map extends React.Component {
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyBydgZ_6S3Gq5F7xFGf_s1t_nob1M5Vy_M&libraries=places",
       function () {
 
-        self.map = new google.maps.Map(self.refs.map, { center: { lat: this.state.lat, lng: this.state.lng }, zoom: 16 });
+        self.map = new google.maps.Map(self.refs.map, { center: { lat: this.state.lat, lng: this.state.lng }, zoom: 15 });
         this.setState(() => ({ map: self.map }));
 
-        self.map.addListener("click", function () {
-          // console.log("Clicked");
-        });
+        let pos = {
+          lat: this.state.lat,
+          lng: this.state.lng
+        };
+
+        createMarker(pos);
       }.bind(this));
 
+    function createMarker(place) {
+      let markerOptions = {
+        position: place,
+        map: self.map,
+        clickable: true
+      };
+
+      let marker = new google.maps.Marker(markerOptions);
+
+      let infoWindow = new google.maps.InfoWindow({
+        // content: this.props.event.title
+      });
+
+      marker.addListener('click', function () {
+        infoWindow.open(self.map, marker);
+      });
+    }
   }
 
   componentDidUpdate() {
-    this.getCurrenctLocation()
-    this.props.initMap(this.map);   
+
+    if (!this.props.event) {
+      this.getCurrenctLocation();
+    }
+
+    this.props.initMap(this.map);
   }
- 
+
   componentWillUnmount() {
-    window.google = {}
+    window.google = {};
   }
   getCurrenctLocation() {
     if (navigator.geolocation) {
@@ -47,12 +74,10 @@ class Map extends React.Component {
     }
   }
 
-
-
   render() {
     return (
       <div >
-        <div ref="map" className="map"><img src="/images/loader.gif"/></div>
+        <div ref="map" className="map"><img src="/images/loader.gif" /></div>
       </div>
     );
   }

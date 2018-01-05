@@ -2,7 +2,7 @@ import uuid from 'uuid';
 import database from '../firebase/firebase';
 import moment from 'moment';
 //Add
-export const addEvent = ({event} = {}
+export const addEvent = ({ event } = {}
 ) => ({
   type: 'ADD_EVENT',
   event
@@ -15,10 +15,10 @@ export const addEventTodb = (eventData = {}) => {
       title = '',
       createdAt = 0,
       type = '',
-      startDate=0,
-      endDate=0,
-      startTime=0,
-      endTime=0,
+      startDate = 0,
+      endDate = 0,
+      startTime = 0,
+      endTime = 0,
       description = '',
       themeClothes = '',
       place_id = '',
@@ -39,9 +39,10 @@ export const addEventTodb = (eventData = {}) => {
       place_id,
       address,
       locationName,
-      geolocation
+      geolocation,
+      uid
     };
-    return database.ref(`users/${uid}/events`).push(event)
+    return database.ref(`events`).push(event)
       .then((ref) => {
         dispatch(addEvent({
           id: ref.key,
@@ -56,15 +57,23 @@ export const removeEvent = ({ id } = {}) => ({
   id
 });
 
-export const removeEventFromdb = (({id} = {}) => {
- 
+export const removeEventFromdb = (({ id } = {}) => {
   return (dispatch, getState) => {
     const uid = getState().auth.uid;
-    return database.ref(`users/${uid}/events/${id}`).remove().then(() => {
-      dispatch(removeEvent({id}));
-    });
+    database.ref(`events/${id}`).once('value')
+      .then((snapshot) => {
+        let owner = snapshot.child('uid').val();
+        if (uid === owner) {
+          return database.ref(`events/${id}`).remove().then(() => {
+            dispatch(removeEvent({ id }));
+          });
+        } else {
+          return
+        }
+      });
   }
 });
+
 
 export const editEvent = (id, updates) => ({
   type: 'EDIT_EVENT',
@@ -75,9 +84,15 @@ export const editEvent = (id, updates) => ({
 export const editEventFromdb = (id, update) => {
   return (dispatch, getState) => {
     const uid = getState().auth.uid;
-    return database.ref(`users/${uid}/events/${id}`).update(update).then(()=>{
-      dispatch(editEvent(id, update));
-    }); 
+    database.ref(`events/${id}`).once('value')
+      .then((snapshot) => {
+        let owner = snapshot.child('uid').val();
+        if (uid === owner) {
+          return database.ref(`events/${id}`).update(update).then(() => {
+            dispatch(editEvent(id, update));
+          });
+        }
+      });
   };
 };
 
@@ -86,12 +101,13 @@ export const setEvents = (events) => ({
   events
 });
 
-export const setEventsTodb = () => {
+let uid ="";
+export const setEventsFromdb = () => {
   return (dispatch, getState) => {
-    const uid = getState().auth.uid;
-    return database.ref(`users/${uid}/events`).once('value').then((snapshot) => {
+    uid = getState().auth.uid;
+    return database.ref(`events`).once('value').then((snapshot) => {
       const events = [];
-    
+
       snapshot.forEach((childSnapshot) => {
         events.push({
           id: childSnapshot.key,
@@ -99,6 +115,33 @@ export const setEventsTodb = () => {
         });
       });
 
+      dispatch(setEvents(events));
+    });
+  }
+};
+
+export const owner = (id) => {
+  return (id===uid ? true : false);
+}
+
+export const setMyEventsFromdb = () => {
+  return (dispatch, getState) => {
+    const uid = getState().auth.uid;
+    return database.ref(`events`).once('value').then((snapshot) => {
+      const events = [];
+      console.log(snapshot.val());
+      snapshot.forEach((childSnapshot) => {
+      
+        if (childSnapshot.val().uid === uid) {
+          events.push({
+            id: childSnapshot.key,
+            ...childSnapshot.val()
+          });
+        }
+        else {
+          return
+        }
+      });
       dispatch(setEvents(events));
     });
   }

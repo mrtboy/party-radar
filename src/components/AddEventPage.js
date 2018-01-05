@@ -6,7 +6,7 @@ import {addEventTodb} from '../actions/events';
 export class AddEventPage extends React.Component {
   onSubmit = (event) => {
     this.props.addEvent(event);
-    this.props.history.push('/eventList');
+    this.props.history.push('/create');
   }
   render() {
     return (

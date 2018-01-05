@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import EventForm from './EventForm';
-import { editEventFromdb, removeEventFromdb } from '../actions/events';
-
+import { editEventFromdb, removeEventFromdb, owner } from '../actions/events';
+import EventDetail from './EventDetail';
 
 export class EditEventPage extends React.Component {
   onSubmit = (event) => {
@@ -13,21 +13,35 @@ export class EditEventPage extends React.Component {
     this.props.removeEventFromdb({ id: this.props.event.id });
     this.props.history.push('/');
   };
+
+
+  isOwner = () => {
+    return owner(this.props.event.uid)
+  }
+
   render() {
     return (
       <div>
         <div className="page-header">
           <div className="content-container">
-            <h1 className="page-header__title">Edit Event</h1>
+            { owner(this.props.event.uid) ? <h1 className="page-header__title">Edit Event</h1> : <h1 className="page-header__title"> {this.props.event.title }</h1>}
           </div>
         </div>
         <div className="content-container">
-        
+        {owner(this.props.event.uid) ? 
           <EventForm
             event={this.props.event}
             onSubmit={this.onSubmit}
           />
-          <button className="button button--delete" onClick={this.onRemove}>Remove Event</button>
+        :
+        <EventDetail 
+        event={this.props.event}
+        />
+        }
+         
+
+          
+          {owner(this.props.event.uid) && <button className="button button--delete" onClick={this.onRemove}>Remove Event</button>}
         </div>
       </div>
     );
