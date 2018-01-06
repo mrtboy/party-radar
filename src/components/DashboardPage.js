@@ -1,9 +1,11 @@
 import React from 'react';
-import SearchPage from './SearchPage';
+import EventListFilter from './EventListFilter';
+import EventList  from './EventList';
 
 const DashboardPage = () => (
   <div>
-  <SearchPage />
+    <EventListFilter />
+    <EventList />
   </div>
 );
 

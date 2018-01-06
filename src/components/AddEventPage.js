@@ -5,8 +5,8 @@ import {addEventTodb} from '../actions/events';
 
 export class AddEventPage extends React.Component {
   onSubmit = (event) => {
-    this.props.addEvent(event);
-    this.props.history.push('/create');
+    this.props.addEventTodb(event);
+    this.props.history.push('/dashboard');
   }
   render() {
     return (
@@ -19,7 +19,7 @@ export class AddEventPage extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  addEvent: (event) => dispatch(addEventTodb(event))
+  addEventTodb: (event) => dispatch(addEventTodb(event))
 });
 
 export default connect(undefined, mapDispatchToProps)(AddEventPage);

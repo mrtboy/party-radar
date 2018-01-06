@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { DateRangePicker } from 'react-dates';
+import { SingleDatePicker } from 'react-dates';
 import Map from './Map';
 import { connect } from 'react-redux';
 
@@ -15,8 +15,7 @@ class EventForm extends React.Component {
 
     this.state = {
       title: props.event ? props.event.title : '',
-      startDate: props.event ? moment(props.event.startDate) : moment(),
-      endDate: props.event ? moment(props.event.endDate) : moment(),
+      eventDate: props.event ? moment(props.event.eventDate) : moment(),
       startTime: props.event ? props.event.startTime : moment(),
       endTime: props.event ? props.event.endTime : moment(),
       createdAt: props.event ? props.event.createdAt : now,
@@ -30,69 +29,6 @@ class EventForm extends React.Component {
       calendarFocused: null
     };
   }
-
-
-  componentDidUpdate() {
-    let map = this.props.map.map;
-    let autocomplete = {};
-
-    let infowindowContent = document.getElementById('infowindow-content');
-    let input = document.getElementById('pac-input');
-
-    autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.bindTo('bounds', map);
-
-    // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-    let infowindow = new google.maps.InfoWindow();
-
-    infowindow.setContent(infowindowContent);
-    let marker = new google.maps.Marker({
-      map: map
-    });
-    marker.addListener('click', function () {
-      infowindow.open(map, marker);
-    });
-
-    autocomplete.addListener('place_changed', function () {
-      infowindow.close();
-      var place = autocomplete.getPlace();
-      if (!place.geometry) {
-        return;
-      }
- 
-      if (place.geometry.viewport) {
-        map.fitBounds(place.geometry.viewport);
-      } else {
-        map.setCenter(place.geometry.location);
-        map.setZoom(17);
-      }
-
-      // Set the position of the marker using the place ID and location.
-      marker.setPlace({
-        placeId: place.place_id,
-        location: place.geometry.location
-      });
-      marker.setVisible(true);
-      this.setState(() => {
-        return {
-          locationName: place.name,
-          place_id: place.place_id,
-          address: place.formatted_address,
-          geolocation: {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng()
-          }
-        }
-      });
-    }.bind(this));
-
-  }
-
-  componentDidCatch(){
-    window.google = {}
-  }
-
 
   //#region  OnChange Value
   onTitleChange = (e) => {
@@ -139,16 +75,15 @@ class EventForm extends React.Component {
     this.setState(() => ({ country }));
   };
 
-  onDatesChange = ({ startDate, endDate }) => {
-    this.setState(() => ({
-      startDate,
-      endDate
-    }))
+  onDateChange = (eventDate) => {
+    if (eventDate) {
+      this.setState(() => ({ eventDate }));
+    }
+
   };
-  
-  onFocusChange = (calendarFocused) => {
-    this.setState(() => ({ calendarFocused }));
-  }
+  onFocusChange = ({ focused }) => {
+    this.setState(() => ({ calendarFocused: focused }));
+  };
 
   onAddressChange = (e) => {
     const address = e.target.value;
@@ -158,70 +93,57 @@ class EventForm extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-
-    if (!this.state.title) {
+    console.log(this.state.geolocation.lat + '  '+ this.props.map.geolocation);
+    if (!this.state.title && !!this.state.geolocation.lat ) {
       this.setState(() => ({
-        error: 'Please provide Title of party and start and end date.'
+        error: 'Please provide Title of party and real location.'
       }))
     } else {
       this.setState(() => ({ error: '' }))
       this.props.onSubmit({
         title: this.state.title,
-        startDate: this.state.startDate.valueOf(),
-        endDate: this.state.endDate.valueOf(),
+        eventDate: this.state.eventDate.valueOf(),
         startTime: this.state.startTime.valueOf(),
         endTime: this.state.endTime.valueOf(),
         createdAt: this.state.createdAt.valueOf(),
         type: this.state.type,
         description: this.state.description,
         themeClothes: this.state.themeClothes,
-        place_id: this.state.place_id,
-        address: this.state.address,
-        locationName: this.state.locationName,
-        geolocation: this.state.geolocation
+        place_id: this.props.map.place_id,
+        address: this.props.map.address,
+        locationName: this.props.map.locationName,
+        geolocation: this.props.map.geolocation,
       })
     }
   }
 
 
   render() {
+    console.log(!!this.state.title && !!this.props.map.address)
     return (
       <div className="content-container">
         <form onSubmit={this.onSubmit} className="form">
           <input className="text-input" placeholder="Party Title" type="text" onChange={this.onTitleChange} value={this.state.title} />
-          <DateRangePicker
-            startDate={this.state.startDate}
-            endDate={this.state.endDate}
-            onDatesChange={this.onDatesChange}
-            focusedInput={this.state.calendarFocused}
-            onFocusChange={this.onFocusChange}
-            showClearDates={true}
-            numberOfMonths={1}
-            isOutsideRange={() => false}
-          />
+                 <SingleDatePicker
+          date={this.state.eventDate}
+          onDateChange={this.onDateChange}
+          focused={this.state.calendarFocused}
+          onFocusChange={this.onFocusChange}
+          numberOfMonths={1}
+          isOutsideRange={() => false}//chech days availability
+        />
 
           <input type="text" className="text-input" placeholder="Type of Party" onChange={this.onTypeChange} value={this.state.type} />
           <textarea type="text" className="text-area" placeholder="Description" onChange={this.onDescriptionChange} value={this.state.description} />
           <input type="text" className="text-input" placeholder="Theme Clothes" onChange={this.onThemeChange} value={this.state.themeClothes} />
-          <input type="text" className="text-input" placeholder="Location Name" value={this.state.locationName} disabled />
-          <input type="text"
-            className="text-input"
-            placeholder="Address"
-            onChange={this.onAddressChange}
-            value={this.state.address}
-            id="pac-input"
-            value={this.state.address} />
-
+          <input type="text" className="text-input" placeholder="Location Name" value={this.props.map.locationName} disabled />
+  
           <div>
-            <div>
-              {/* <input className="controls" type="text" id="pac-input" placeholder="Enter Your Location" /> */}
-            </div>
-            <button className="button-add">
-              Save Event
-            </button>
+            {!!this.state.title && !!this.props.map.locationName ? <button className="button-add" > Save Event </button> :
+                <p>Please Enter Title and Address from map for Event.</p>}
           </div>
         </form>
-        <Map event={this.props.event}/>
+        <Map event={this.props.event} autoComplete={true}/>
       </div>
     );
   }

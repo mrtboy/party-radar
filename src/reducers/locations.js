@@ -1,13 +1,15 @@
 
 
 const locationsReducer = (state = {}, action) => {
-  switch(action.type){
+  switch (action.type) {
     case 'SET_CURRENT_LOCATION':
       return {
         ...state,
-        ...action.setCurrentLocation
-      }
-    default: 
+        ...action.pos
+      };
+    case 'NEAR_ME':
+      return action.events;
+    default:
       return state;
   }
 };

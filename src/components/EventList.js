@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import EventListItem from './EventListItem';
+import getVisibleEvents from '../selectors/events';
 
 export const EventList = (props) => (
   <div className="content-container">
@@ -27,7 +28,7 @@ export const EventList = (props) => (
 
 const mapStateToProps = (state) => {
   return {
-    events: state.events
+    events: getVisibleEvents(state.events, state.filters)
   };
 };
 
