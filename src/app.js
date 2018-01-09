@@ -29,7 +29,7 @@ const renderApp = () => {
 ReactDOM.render(<LoadingPage />, document.getElementById('app')); 
 
 
-
+//Check user Auth before render page
 firebase.auth().onAuthStateChanged((user) => {
   if(user) {
     store.dispatch(login(user.uid));

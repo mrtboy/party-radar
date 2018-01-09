@@ -7,7 +7,7 @@ export const LoginPage = ({ startLogin }) => (
     <div className="box-layout__box">
       <h1 className="box-layout__title">Party Radar</h1>
       <p>Check live party around yourself!</p>
-      <img src="./images/google.png" className="btn--google" alt="Login with Google" srcset="" onClick={startLogin}/>
+      <img src="./images/google.png" className="btn--google" alt="Login with Google" onClick={startLogin}/>
     </div>
   </div>
 );

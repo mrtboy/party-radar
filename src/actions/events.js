@@ -13,7 +13,6 @@ export const addEventTodb = (eventData = {}) => {
     const uid = getState().auth.uid;
     const {
       title = '',
-      createdAt = 0,
       type = '',
       eventDate = 0,
       startTime = 0,
@@ -27,7 +26,6 @@ export const addEventTodb = (eventData = {}) => {
     } = eventData;
     const event = {
       title,
-      createdAt,
       type,
       eventDate,
       startTime,
@@ -94,7 +92,7 @@ export const editEventFromdb = (id, update) => {
   };
 };
 
-export const setEvents = (events) => ({
+export const setEvents = (events = {}) => ({
   type: 'SET_EVENTS',
   events
 });
