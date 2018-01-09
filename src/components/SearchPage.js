@@ -67,7 +67,6 @@ class SearchPage extends React.Component {
     document.getElementsByTagName('head')[0].appendChild(script);
 
     window.eqfeed_callback = function(results) {
-      console.log(results);
       for (var i = 0; i < results.features.length; i++) {
         var coords = results.features[i].geometry.coordinates;
         var latLng = new google.maps.LatLng(coords[1],coords[0]);

@@ -93,7 +93,6 @@ class EventForm extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state.geolocation.lat + '  '+ this.props.map.geolocation);
     if (!this.state.title && !!this.state.geolocation.lat ) {
       this.setState(() => ({
         error: 'Please provide Title of party and real location.'
@@ -119,7 +118,6 @@ class EventForm extends React.Component {
 
 
   render() {
-    console.log(!!this.state.title && !!this.props.map.address)
     return (
       <div className="content-container">
         <form onSubmit={this.onSubmit} className="form">

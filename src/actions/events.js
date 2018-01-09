@@ -127,7 +127,6 @@ export const setMyEventsFromdb = () => {
     const uid = getState().auth.uid;
     return database.ref(`events`).once('value').then((snapshot) => {
       const events = [];
-      console.log(snapshot.val());
       snapshot.forEach((childSnapshot) => {
       
         if (childSnapshot.val().uid === uid) {
