@@ -1,7 +1,6 @@
 import moment from 'moment';
 import map from '../components/Map';
 
-//Get visible Events
 const getVisibleEvents = (events, { text, sortBy, startDate, endDate, range, currentLocation }) => {
   return events.filter((event)=>{
     const eventDateMoment = moment(event.eventDate);
@@ -24,19 +23,15 @@ export default getVisibleEvents;
 
 function nearMe(range, currenctLocation, eventLocation){
   if( findDistance(currenctLocation, eventLocation) < range * 1000 ){
-    console.log(true);
     return true;
   } else {
-    console.log(false);
     return false;
   }
-
-  // console.log(range + ' ' + currenctLocation+' ' + eventLocation ); 
 }
 
 function findDistance(first, second) {
 
-  var R = 6371e3; // metres
+  var R = 6371e3;
   var t1 = toRadian(first.lat);
   var t2 = toRadian(second.lat);
   var dt = toRadian(second.lat - first.lat);
@@ -48,12 +43,10 @@ function findDistance(first, second) {
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
   var d = R * c;
-  // console.log(d / 1000);
   console.log(d, R, c);
   return d;
 }
 function toRadian(angle) {
   return angle * (Math.PI / 180);
-  // console.log(angle * (Math.PI / 180));
 }
 

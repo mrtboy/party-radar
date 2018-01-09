@@ -2,7 +2,7 @@
 
 exports[`should render DashboardPage correctly 1`] = `
 <div>
-  Dashboard Page
-  <Connect(SearchPage) />
+  <Connect(EventListFilters) />
+  <Connect(EventList) />
 </div>
 `;

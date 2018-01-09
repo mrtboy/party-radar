@@ -49,13 +49,6 @@ class EventListFilters extends React.Component {
             />
           </div>
           <div className="input-group__item">
-            {/* <select
-              className="select"
-              value={this.props.filters.sortBy}
-              onChange={this.onSortChange}
-            >
-              <option value="date">Date</option>
-            </select> */}
           </div>
           <div className="input-group__item">
             <DateRangePicker
@@ -70,7 +63,7 @@ class EventListFilters extends React.Component {
             />
           </div>
           <div className="input-group__item">
-            <input className="text-input" type="text" placeholder="Km" onChange={this.handleRangeChange} value={this.props.filters.range} />
+            <input className="text-input" type="number" placeholder="Km" onChange={this.handleRangeChange} value={this.props.filters.range} />
           </div>
           
         </div>

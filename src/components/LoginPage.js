@@ -5,9 +5,9 @@ import { startLogin } from '../actions/auth';
 export const LoginPage = ({ startLogin }) => (
   <div className="box-layout">
     <div className="box-layout__box">
-      <h1 className="box-layout__title">Party Radat</h1>
+      <h1 className="box-layout__title">Party Radar</h1>
       <p>Check live party around yourself!</p>
-      <button className="button" onClick={startLogin}>Login with Google</button>  
+      <img src="./images/google.png" className="btn--google" alt="Login with Google" srcset="" onClick={startLogin}/>
     </div>
   </div>
 );

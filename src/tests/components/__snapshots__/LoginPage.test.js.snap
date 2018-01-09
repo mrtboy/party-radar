@@ -10,17 +10,18 @@ exports[`should render Login Page 1`] = `
     <h1
       className="box-layout__title"
     >
-      Party Radat
+      Party Radar
     </h1>
     <p>
       Check live party around yourself!
     </p>
-    <button
-      className="button"
+    <img
+      alt="Login with Google"
+      className="btn--google"
       onClick={[Function]}
-    >
-      Login with Google
-    </button>
+      src="./images/google.png"
+      srcset=""
+    />
   </div>
 </div>
 `;

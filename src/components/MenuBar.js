@@ -6,7 +6,6 @@ const MenuBar = () => (
     <div className="content-container">
       <ul>
         <li><Link to="/">Home</Link></li>
-        <li><Link to="/">Happening Now</Link></li>
         <li className="dropdown">
           <a href="javascript:void(0)" className="dropbtn">Manage Events</a>
           <div className="dropdown-content">
